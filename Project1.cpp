@@ -8,17 +8,17 @@
 using namespace std;
 
 //Program class which specifies one program
-class Program{
+struct Program{
 	//takes note of index, arrival time, burst time, priority and remaning time left to run
-private:
 	int index; int arrival; int burst; int priority;
 	int runningTime;
-public:
+
 	Program(){
 		index = 0;
 		arrival = 0;
 		burst = 0;
 		priority = 0;
+		runningTime = 0;
 	}
 	Program(int i, int a, int b, int p){
 		index = i;
@@ -26,27 +26,6 @@ public:
 		burst = b;
 		priority = p;
 	}
-
-	int getIndex(){
-		return index;
-	}
-
-	int getArrival(){
-		return arrival;
-	}
-
-	int getBurst(){
-		return burst;
-	}
-
-	int getPriority(){
-		return priority;
-	}
-
-	int getTime(){
-		return runningTime;
-	}
-
 	//lets the process run in the cpu for one clock cycle. Burst needed decreases and time spent running increases
 	void run(){
 		burst--;
@@ -59,26 +38,12 @@ public:
 struct SJFCompare{
 public:
 	bool operator()(Program& p1, Program& p2){
-		bool result = false;
+		//false: moves on to the next element, true: places element before current element
+		//p2 is the program being pushed
 
-		if(p1.getArrival() < p2.getArrival()){
-			if(p1.getBurst() < p2.getBurst()){
-				result = true;
-			}
-			else if(p1.getBurst() == p2.getBurst()){
-				if(p1.getIndex() < p2.getIndex()){
-					result = true;
-				}
-			}
+		if(p1.arrival >= p2.arrival){
 
 		}
-		else if(p1.getArrival() == p2.getArrival()){
-			if(p1.getIndex() < p2.getIndex()){
-				result = true;
-			}
-		}
-
-		return result;
 	}
 };
 
@@ -93,20 +58,23 @@ string fcfs(){
 string sjf(Program* arr, int size){
 	string output; stringstream out;
 	priority_queue<Program, vector<Program>, SJFCompare> pq;
-	int timer;
+	int timer = 0;
+	int cp = 0;
 
-	for(int i=0; i<size; i++){
-		pq.push(arr[i]);
-	}
+	//Sort array to make the least access time first and the greatest access time last
+
+	//Put the first element in the priority queue and increase timer by that amount
 
 	while(!pq.empty()){
 		Program p = pq.top();
 		pq.pop();
+
 		while(p.getBurst()!=0){
+			//check if any of the processes enter with the timer
 			p.run();
 			timer++;
 		}
-		out << timer << " " << p.getIndex() << " " << p.getTime() << "X" << endl;
+		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
 	}
 
 	output = out.str();
@@ -167,7 +135,7 @@ int main(){
 		}
 
 		if(type=="SJF"){
-			cout << sjf(list, sizeof(list));
+			cout << sjf(list, numPros);
 		}
 	}
 
