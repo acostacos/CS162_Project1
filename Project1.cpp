@@ -70,6 +70,7 @@ void quicksort(Program* arr, int low, int high){
 		quicksort(arr, left+1, high);
 	}
 }
+*/
 
 //returns number of array elements that can be added to the program
 int checkArrival(Program* arr, int size, int cp, int timer){
@@ -117,9 +118,8 @@ FCFS
 
 string fcfs(){
 
-}
 */
-
+  
 string sjf(Program* arr, int size){
 	string output; stringstream out;
 	priority_queue<Program, vector<Program>, SJFCompare> pq;
@@ -161,7 +161,6 @@ string sjf(Program* arr, int size){
 		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
 
 	}
-
 	output = out.str();
 	return output;
 }
@@ -201,10 +200,15 @@ int main(){
 	int numTest;
 	cin >> numTest;
 
+	cout << "Number of Test Cases: " << numTest << endl;
+
 	for(int i=0; i<numTest; i++){
 		int numPros; string type;
 		cin >> numPros;
 		cin >> type;
+
+		cout << "Number of Programs: " << numPros << endl;
+		cout << "Type of CPU Scheduling: " << type << endl;
 
 		if(type=="RR"){
 			int q;
