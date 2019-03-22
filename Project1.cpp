@@ -70,7 +70,6 @@ void quicksort(Program* arr, int low, int high){
 		quicksort(arr, left+1, high);
 	}
 }
-*/
 
 //returns number of array elements that can be added to the program
 int checkArrival(Program* arr, int size, int cp, int timer){
@@ -130,7 +129,6 @@ string sjf(Program* arr, int size){
 	int initialChecker = checkArrival(arr, size, cp, timer);
 		if(initialChecker>0){
 			for(int i=0; i<initialChecker; i++){
-				cout << arr[cp].index << endl;
 				pq.push(arr[cp]);
 				cp++;
 			}
@@ -141,14 +139,11 @@ string sjf(Program* arr, int size){
 		Program p = pq.top();
 		pq.pop();
 
-		cout << "Top: " << p.index << endl;;
-
 		while(p.burst!=0){
 			//check if any of the processes enter with the timer
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
 				for(int i=0; i<progChecker; i++){
-					cout << arr[cp].index << endl;
 					pq.push(arr[cp]);
 					cp++;
 				}
