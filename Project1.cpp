@@ -33,47 +33,6 @@ struct Program{
 	}
 };
 
-/*
-sort(p,p+n, [](const Node a, const Node b) -> bool{
-	// comparator logic
-});
-*/
-
-//SJFCompare class used when inserting Programs in the priority queue in the SJF Schduling method
-struct SJFCompare{
-public:
-	bool operator()(Program& p1, Program& p2){
-		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
-		//cout << p1.index << " and " << p2.index << endl;
-
-		//check p1 is longer than p2
-		if(p1.burst > p2.burst){
-			return true;
-		}
-		else if(p1.burst == p2.burst){
-			if(p1.index > p2.index){
-				return true;
-			}
-		}
-
-		return false;
-	}
-};
-
-//returns number of array elements that can be added to the program
-int checkArrival(Program* arr, int size, int cp, int timer){
-	//check top of array and see if arrival time matches the current time
-	int counter = 0;
-	Program next = arr[cp];
-	//check the next things in the array until the arrival time is different
-	while(cp<size && next.arrival <= timer){
-		counter++;
-		next = arr[cp+counter];
-	}
-	//return number of elements to be added
-	return counter;
-}
-
 //helper function for quicksort
 void swap(Program* a, Program* b){
 	Program t = *a;
@@ -111,33 +70,85 @@ void quicksort(Program* arr, int low, int high){
 		quicksort(arr, left+1, high);
 	}
 }
+*/
+
+//returns number of array elements that can be added to the program
+int checkArrival(Program* arr, int size, int cp, int timer){
+	//check top of array and see if arrival time matches the current time
+	int counter = 0;
+	Program next = arr[cp];
+	//check the next things in the array until the arrival time is different
+	while(cp+counter<size && next.arrival <= timer){
+		counter++;
+		next = arr[cp+counter];
+	}
+	//return number of elements to be added
+	return counter;
+}
+
+//SJFCompare class used when inserting Programs in the priority queue in the SJF Schduling method
+//Can use the ff code instead of compare struc
+/*
+sort(p,p+n, [](const Node a, const Node b) -> bool{
+	// comparator logic
+});
+*/
+struct SJFCompare{
+public:
+	bool operator()(Program& p1, Program& p2){
+		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
+		//cout << p1.index << " and " << p2.index << endl;
+
+		//check p1 is longer than p2
+		if(p1.burst > p2.burst){
+			return true;
+		}
+		else if(p1.burst == p2.burst){
+			if(p1.index > p2.index){
+				return true;
+			}
+		}
+
+		return false;
+	}
+};
 
 /*
 FCFS
 
 string fcfs(){
 
-}
 */
-
+  
 string sjf(Program* arr, int size){
 	string output; stringstream out;
 	priority_queue<Program, vector<Program>, SJFCompare> pq;
 	int timer = 0;
 	int cp = 0;
 
+	//push all of the elements that arrive at 0 inside
+	int initialChecker = checkArrival(arr, size, cp, timer);
+		if(initialChecker>0){
+			for(int i=0; i<initialChecker; i++){
+				cout << arr[cp].index << endl;
+				pq.push(arr[cp]);
+				cp++;
+			}
+	}
+
 	//run while pq is not empty and while not all the programs have been added to the priority queue
-	do{
+	while(cp<size || !pq.empty()){
 		Program p = pq.top();
 		pq.pop();
 
-		cout << "Top: " << p.index << endl;
+		cout << "Top: " << p.index << endl;;
 
 		while(p.burst!=0){
 			//check if any of the processes enter with the timer
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
 				for(int i=0; i<progChecker; i++){
+					cout << arr[cp].index << endl;
 					pq.push(arr[cp]);
 					cp++;
 				}
@@ -146,23 +157,28 @@ string sjf(Program* arr, int size){
 			p.run();
 			timer++;
 		}
-		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
-	}while(cp<size || !pq.empty());
 
+		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+
+	}
 	output = out.str();
 	return output;
 }
 
 /*
 
-SRTF, P, RR
+SRTF, PN, PP, RR
 
 string srtf(){
 
 }
 
-string p(){
+string pn(){
 
+}
+
+string pp(){
+	
 }
 
 string rr(int q){
