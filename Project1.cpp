@@ -54,7 +54,7 @@ public:
 
 
 //SJFCompare class used when inserting Programs in the priority queue in the SJF Schduling method
-struct SJFCompare{
+/*struct SJFCompare{
 public:
 	bool operator()(Program& p1, Program& p2){
 		bool result = false;
@@ -78,17 +78,17 @@ public:
 
 		return result;
 	}
-};
+};*/
 
-/*
-FCFS
+
+//FCFS
 
 string fcfs(){
 
 }
-*/
 
-string sjf(Program* arr, int size){
+
+/*string sjf(Program* arr, int size){
 	string output; stringstream out;
 	priority_queue<Program, vector<Program>, SJFCompare> pq;
 	int timer;
@@ -109,7 +109,7 @@ string sjf(Program* arr, int size){
 
 	output = out.str();
 	return output;
-}
+}*/
 
 /*
 
@@ -164,9 +164,9 @@ int main(){
 			list[j] = p;
 		}
 
-		if(type=="SJF"){
-			cout << sjf(list, sizeof(list));
-		}
+		//if(type=="SJF"){
+		//	cout << sjf(list, sizeof(list));
+		//}
 	}
 
 	return 0;
