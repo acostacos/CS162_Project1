@@ -112,12 +112,66 @@ public:
 	}
 };
 
-/*
-FCFS
+struct FCFSCompare{
+public:
+	bool operator()(Program& p1, Program& p2){
+		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
+		//cout << p1.index << " and " << p2.index << endl;
 
-string fcfs(){
+		//check p1 is before p2
+		if(p1.index > p2.index){
+			return true;
+		}
 
-*/
+		return false;
+	}
+};
+
+
+//FCFS
+
+string fcfs(Program* arr, int size){
+	string output; stringstream out;
+	priority_queue<Program, vector<Program>, FCFSCompare> pq;
+	int timer = 0;
+	int cp = 0;
+
+	//push all of the elements that arrive at 0 inside
+	int initialChecker = checkArrival(arr, size, cp, timer);
+		if(initialChecker>0){
+			for(int i=0; i<initialChecker; i++){
+				pq.push(arr[cp]);
+				cp++;
+			}
+	}
+
+	//run while pq is not empty and while not all the programs have been added to the priority queue
+	while(cp<size || !pq.empty()){
+		Program p = pq.top();
+		pq.pop();
+
+		while(p.burst!=0){
+			//check if any of the processes enter with the timer
+			int progChecker = checkArrival(arr, size, cp, timer);
+			if(progChecker>0){
+				for(int i=0; i<progChecker; i++){
+					pq.push(arr[cp]);
+					cp++;
+				}
+			}
+
+			p.run();
+			timer++;
+		}
+
+		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+
+	}
+	output = out.str();
+	return output;
+}
+
+
   
 string sjf(Program* arr, int size){
 	string output; stringstream out;
@@ -231,6 +285,9 @@ int main(){
 
 		if(type=="SJF"){
 			cout << sjf(list, numPros);
+		}
+		if(type=="FCFS"){
+			cout << fcfs(list, numPros);
 		}
 	}
 
