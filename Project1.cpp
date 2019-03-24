@@ -112,67 +112,34 @@ public:
 	}
 };
 
-struct FCFSCompare{
+struct SRTFCompare{
 public:
 	bool operator()(Program& p1, Program& p2){
 		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
 		//cout << p1.index << " and " << p2.index << endl;
 
-		//check p1 is before p2
-		if(p1.index > p2.index){
+		//check p1 is longer than p2
+		if(p1.burst-p1.runningTime > p2.burst-p2.runningTime){
 			return true;
+		}
+		else if(p1.burst-p1.runningTime == p2.burst-p2.runningTime){
+			if(p1.index > p2.index){
+				return true;
+			}
 		}
 
 		return false;
 	}
 };
 
+/*
+FCFS
 
-//FCFS
+string fcfs(){
 
-string fcfs(Program* arr, int size){
-	string output; stringstream out;
-	priority_queue<Program, vector<Program>, FCFSCompare> pq;
-	int timer = 0;
-	int cp = 0;
-
-	//push all of the elements that arrive at 0 inside
-	int initialChecker = checkArrival(arr, size, cp, timer);
-		if(initialChecker>0){
-			for(int i=0; i<initialChecker; i++){
-				pq.push(arr[cp]);
-				cp++;
-			}
-	}
-
-	//run while pq is not empty and while not all the programs have been added to the priority queue
-	while(cp<size || !pq.empty()){
-		Program p = pq.top();
-		pq.pop();
-
-		while(p.burst!=0){
-			//check if any of the processes enter with the timer
-			int progChecker = checkArrival(arr, size, cp, timer);
-			if(progChecker>0){
-				for(int i=0; i<progChecker; i++){
-					pq.push(arr[cp]);
-					cp++;
-				}
-			}
-
-			p.run();
-			timer++;
-		}
-
-		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
-
-	}
-	output = out.str();
-	return output;
 }
+*/
 
-
-  
 string sjf(Program* arr, int size){
 	string output; stringstream out;
 	priority_queue<Program, vector<Program>, SJFCompare> pq;
@@ -183,6 +150,7 @@ string sjf(Program* arr, int size){
 	int initialChecker = checkArrival(arr, size, cp, timer);
 		if(initialChecker>0){
 			for(int i=0; i<initialChecker; i++){
+				cout << arr[cp].index << endl;
 				pq.push(arr[cp]);
 				cp++;
 			}
@@ -193,11 +161,14 @@ string sjf(Program* arr, int size){
 		Program p = pq.top();
 		pq.pop();
 
+		cout << "Top: " << p.index << endl;;
+
 		while(p.burst!=0){
 			//check if any of the processes enter with the timer
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
 				for(int i=0; i<progChecker; i++){
+					cout << arr[cp].index << endl;
 					pq.push(arr[cp]);
 					cp++;
 				}
@@ -210,17 +181,78 @@ string sjf(Program* arr, int size){
 		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
 
 	}
+
+	output = out.str();
+	return output;
+}
+
+
+string srtf(Program* arr, int size){
+	string output; stringstream out;
+	priority_queue<Program, vector<Program>, SRTFCompare> pq;
+	int timer = 0;
+	int cp = 0;
+
+	//push all of the elements that arrive at 0 inside
+	int initialChecker = checkArrival(arr, size, cp, timer);
+		if(initialChecker>0){
+			for(int i=0; i<initialChecker; i++){
+				cout << arr[cp].index << endl;
+				pq.push(arr[cp]);
+				cp++;
+			}
+	}
+
+	//assignChecker is used to store whether a program was preemptively swapped or not. It only controls whether to discard the program, or put it back in the queue
+	bool switchChecker = false;
+	Program p;
+
+	//run while pq is not empty and while not all the programs have been added to the priority queue
+	//to check remaining time: burst-runningTime
+	while(cp<size || !pq.empty()){
+		if(switchChecker){
+			pq.push(p);
+			switchChecker = false;
+		}
+
+		p = pq.top();
+		pq.pop();
+
+		cout << "Top: " << p.index << endl;;
+
+		while(p.burst!=0){
+			//check if any of the processes enter with the timer
+			int progChecker = checkArrival(arr, size, cp, timer);
+			if(progChecker>0){
+				for(int i=0; i<progChecker; i++){
+					cout << arr[cp].index << endl;
+					pq.push(arr[cp]);
+					cp++;
+				}
+			}
+
+			//Preemptive: Check if top of the queue has less remaining time left. If it does, make it the current running process
+			Program ptemp = pq.top();
+			if(ptemp.burst-ptemp.runningTime < p.burst-p.runningTime){
+				switchChecker = true;
+				break;
+			}
+
+			p.run();
+			timer++;
+		}
+
+		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+
+	}
+
 	output = out.str();
 	return output;
 }
 
 /*
 
-SRTF, PN, PP, RR
-
-string srtf(){
-
-}
+PN, PP, RR
 
 string pn(){
 
@@ -249,15 +281,10 @@ int main(){
 	int numTest;
 	cin >> numTest;
 
-	cout << "Number of Test Cases: " << numTest << endl;
-
 	for(int i=0; i<numTest; i++){
 		int numPros; string type;
 		cin >> numPros;
 		cin >> type;
-
-		cout << "Number of Programs: " << numPros << endl;
-		cout << "Type of CPU Scheduling: " << type << endl;
 
 		if(type=="RR"){
 			int q;
@@ -286,8 +313,9 @@ int main(){
 		if(type=="SJF"){
 			cout << sjf(list, numPros);
 		}
-		if(type=="FCFS"){
-			cout << fcfs(list, numPros);
+
+		if(type=="STRF"){
+			cout << srtf(list, numPros);
 		}
 	}
 
