@@ -196,7 +196,6 @@ string srtf(Program* arr, int size){
 	int initialChecker = checkArrival(arr, size, cp, timer);
 		if(initialChecker>0){
 			for(int i=0; i<initialChecker; i++){
-				cout << arr[cp].index << endl;
 				pq.push(arr[cp]);
 				cp++;
 			}
@@ -218,9 +217,6 @@ string srtf(Program* arr, int size){
 		if(!pq.empty()){
 			p = pq.top();
 			pq.pop();
-
-			cout << "Top: " << p.index << endl;
-			cout << "Running Time: " << p.runningTime << endl;
 		}
 
 		while(p.burst!=p.runningTime){
@@ -228,7 +224,6 @@ string srtf(Program* arr, int size){
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
 				for(int i=0; i<progChecker; i++){
-					cout << arr[cp].index << endl;
 					pq.push(arr[cp]);
 					cp++;
 				}
