@@ -10,8 +10,9 @@ using namespace std;
 //Program class which specifies one program
 struct Program{
 	//takes note of index, arrival time, burst time, priority and remaning time left to run
+	//current time represents how much time it spent running in a CPU burst (for preemptive scheduling purposes)
 	int index; int arrival; int burst; int priority;
-	int runningTime;
+	int runningTime; int currentTime;
 
 	Program(){
 		index = 0;
@@ -28,8 +29,8 @@ struct Program{
 	}
 	//lets the process run in the cpu for one clock cycle. Burst needed decreases and time spent running increases
 	void run(){
-		burst--;
 		runningTime++;
+		currentTime++;
 	}
 };
 
@@ -61,7 +62,9 @@ void quicksort(Program* arr, int low, int high){
 		right--;
 	}
 
-	swap(&arr[left], &arr[high]);
+	if(arr[left].arrival>arr[high].arrival){
+		swap(&arr[left], &arr[high]);
+	}
 
 	if(left-1>low){
 		quicksort(arr, low, left-1);
@@ -150,7 +153,6 @@ string sjf(Program* arr, int size){
 	int initialChecker = checkArrival(arr, size, cp, timer);
 		if(initialChecker>0){
 			for(int i=0; i<initialChecker; i++){
-				cout << arr[cp].index << endl;
 				pq.push(arr[cp]);
 				cp++;
 			}
@@ -161,14 +163,11 @@ string sjf(Program* arr, int size){
 		Program p = pq.top();
 		pq.pop();
 
-		cout << "Top: " << p.index << endl;;
-
-		while(p.burst!=0){
+		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
 				for(int i=0; i<progChecker; i++){
-					cout << arr[cp].index << endl;
 					pq.push(arr[cp]);
 					cp++;
 				}
@@ -178,7 +177,7 @@ string sjf(Program* arr, int size){
 			timer++;
 		}
 
-		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+		out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
 
 	}
 
@@ -206,21 +205,25 @@ string srtf(Program* arr, int size){
 	//assignChecker is used to store whether a program was preemptively swapped or not. It only controls whether to discard the program, or put it back in the queue
 	bool switchChecker = false;
 	Program p;
-
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	//to check remaining time: burst-runningTime
 	while(cp<size || !pq.empty()){
 		if(switchChecker){
+			//set the currentTime to 0 if you put the process back in the queue
+			p.currentTime = 0;
 			pq.push(p);
 			switchChecker = false;
 		}
 
-		p = pq.top();
-		pq.pop();
+		if(!pq.empty()){
+			p = pq.top();
+			pq.pop();
 
-		cout << "Top: " << p.index << endl;;
+			cout << "Top: " << p.index << endl;
+			cout << "Running Time: " << p.runningTime << endl;
+		}
 
-		while(p.burst!=0){
+		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
@@ -242,7 +245,7 @@ string srtf(Program* arr, int size){
 			timer++;
 		}
 
-		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+		out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
 
 	}
 
@@ -314,7 +317,7 @@ int main(){
 			cout << sjf(list, numPros);
 		}
 
-		if(type=="STRF"){
+		if(type=="SRTF"){
 			cout << srtf(list, numPros);
 		}
 	}
