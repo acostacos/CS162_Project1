@@ -142,8 +142,13 @@ public:
 		//cout << p1.index << " and " << p2.index << endl;
 
 		//check p1 is longer than p2
-		if(p1.index > p2.index){
+		if(p1.arrival > p2.arrival){
 			return true;
+		}
+		else if(p1.arrival == p2.arrival){
+			if(p1.index > p2.index){
+				return true;
+			}
 		}
 
 		return false;
@@ -332,10 +337,10 @@ int main(){
 		cin >> numPros;
 		cin >> type;
 
-		if(type=="RR"){
+		/*if(type=="RR"){
 			int q;
 			cin >> q;
-		} 
+		} */
 
 		Program list[numPros];
 
