@@ -7,6 +7,10 @@
 
 using namespace std;
 
+//------------------------------------------------------------------------------------------------------------------------------------
+// HELPER CLASSES AND FUNCTIONS
+//------------------------------------------------------------------------------------------------------------------------------------
+
 //Program class which specifies one program
 struct Program{
 	//takes note of index, arrival time, burst time, priority and remaning time left to run
@@ -86,62 +90,19 @@ int checkArrival(Program* arr, int size, int cp, int timer){
 	}
 	//return number of elements to be added
 	return counter;
-}
+}//SJFCompare class used when inserting Programs in the priority queue in the SJF Schduling method
 
-//SJFCompare class used when inserting Programs in the priority queue in the SJF Schduling method
-//Can use the ff code instead of compare struc
-/*
-sort(p,p+n, [](const Node a, const Node b) -> bool{
-	// comparator logic
-});
-*/
-struct SJFCompare{
-public:
-	bool operator()(Program& p1, Program& p2){
-		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
-		//cout << p1.index << " and " << p2.index << endl;
 
-		//check p1 is longer than p2
-		if(p1.burst > p2.burst){
-			return true;
-		}
-		else if(p1.burst == p2.burst){
-			if(p1.index > p2.index){
-				return true;
-			}
-		}
 
-		return false;
-	}
-};
+//------------------------------------------------------------------------------------------------------------------------------------
+// FCFS
+//------------------------------------------------------------------------------------------------------------------------------------
 
-struct SRTFCompare{
-public:
-	bool operator()(Program& p1, Program& p2){
-		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
-		//cout << p1.index << " and " << p2.index << endl;
-
-		//check p1 is longer than p2
-		if(p1.burst-p1.runningTime > p2.burst-p2.runningTime){
-			return true;
-		}
-		else if(p1.burst-p1.runningTime == p2.burst-p2.runningTime){
-			if(p1.index > p2.index){
-				return true;
-			}
-		}
-
-		return false;
-	}
-};
-
+//FCFSCompare class used when inserting Programs in the priority queue in the FCFS Schduling method
 struct FCFSCompare{
 public:
 	bool operator()(Program& p1, Program& p2){
 		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
-		//cout << p1.index << " and " << p2.index << endl;
-
-		//check p1 is longer than p2
 		if(p1.arrival > p2.arrival){
 			return true;
 		}
@@ -196,6 +157,29 @@ string fcfs(Program* arr, int size){
 	return output;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------
+// SJF
+//------------------------------------------------------------------------------------------------------------------------------------
+
+//SJFCompare class used when inserting Programs in the priority queue in the SJF Schduling method
+struct SJFCompare{
+public:
+	bool operator()(Program& p1, Program& p2){
+		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
+		//check p1 is longer than p2
+		if(p1.burst > p2.burst){
+			return true;
+		}
+		else if(p1.burst == p2.burst){
+			if(p1.index > p2.index){
+				return true;
+			}
+		}
+
+		return false;
+	}
+};
+
 string sjf(Program* arr, int size){
 	string output; stringstream out;
 	priority_queue<Program, vector<Program>, SJFCompare> pq;
@@ -238,6 +222,28 @@ string sjf(Program* arr, int size){
 	return output;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------
+// SRTF
+//------------------------------------------------------------------------------------------------------------------------------------
+
+//SRTFcompare class used when inserting Programs in the priority queue in the SRTF Schduling method
+struct SRTFCompare{
+public:
+	bool operator()(Program& p1, Program& p2){
+		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
+		//check p1 has a greater remaining time left than p2
+		if(p1.burst-p1.runningTime > p2.burst-p2.runningTime){
+			return true;
+		}
+		else if(p1.burst-p1.runningTime == p2.burst-p2.runningTime){
+			if(p1.index > p2.index){
+				return true;
+			}
+		}
+
+		return false;
+	}
+};
 
 string srtf(Program* arr, int size){
 	string output; stringstream out;
@@ -285,6 +291,142 @@ string srtf(Program* arr, int size){
 			//Preemptive: Check if top of the queue has less remaining time left. If it does, make it the current running process
 			Program ptemp = pq.top();
 			if(ptemp.burst-ptemp.runningTime < p.burst-p.runningTime){
+
+				switchChecker = true;
+				break;
+			}
+
+			p.run();
+			timer++;
+		}
+
+		out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+
+	}
+
+	output = out.str();
+	return output;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+// PRIORITY
+//------------------------------------------------------------------------------------------------------------------------------------
+
+//PCompare class used when inserting Programs in the priority queue in the Priority Schduling method
+struct PCompare{
+public:
+	bool operator()(Program& p1, Program& p2){
+		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
+		//check p1 has a higher priority than p2
+		if(p1.priority> p2.priority){
+			return true;
+		}
+		//if priority is the same, check the one with the less index
+		else if(p1.priority == p2.priority){
+			if(p1.index > p2.index){
+				return true;
+			}
+		}
+
+		return false;
+	}
+};
+
+//------------------------------------------------------------------------------------------------------------------------------------
+// NON-PREEMPTIVE
+//------------------------------------------------------------------------------------------------------------------------------------
+
+string pn(Program* arr, int size){
+	string output; stringstream out;
+	priority_queue<Program, vector<Program>, PCompare> pq;
+	int timer = 0;
+	int cp = 0;
+
+	//push all of the elements that arrive at 0 inside
+	int initialChecker = checkArrival(arr, size, cp, timer);
+		if(initialChecker>0){
+			for(int i=0; i<initialChecker; i++){
+				pq.push(arr[cp]);
+				cp++;
+			}
+	}
+
+	//run while pq is not empty and while not all the programs have been added to the priority queue
+	while(cp<size || !pq.empty()){
+		Program p = pq.top();
+		pq.pop();
+
+		while(p.burst!=p.runningTime){
+			//check if any of the processes enter with the timer
+			int progChecker = checkArrival(arr, size, cp, timer);
+			if(progChecker>0){
+				for(int i=0; i<progChecker; i++){
+					pq.push(arr[cp]);
+					cp++;
+				}
+			}
+
+			p.run();
+			timer++;
+		}
+
+		out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+
+	}
+
+	output = out.str();
+	return output;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+// PREEMPTIVE
+//------------------------------------------------------------------------------------------------------------------------------------
+
+string pp(Program* arr, int size){
+	string output; stringstream out;
+	priority_queue<Program, vector<Program>, PCompare> pq;
+	int timer = 0;
+	int cp = 0;
+
+	//push all of the elements that arrive at 0 inside
+	int initialChecker = checkArrival(arr, size, cp, timer);
+		if(initialChecker>0){
+			for(int i=0; i<initialChecker; i++){
+				pq.push(arr[cp]);
+				cp++;
+			}
+	}
+
+	//assignChecker is used to store whether a program was preemptively swapped or not. It only controls whether to discard the program, or put it back in the queue
+	bool switchChecker = false;
+	Program p;
+	//run while pq is not empty and while not all the programs have been added to the priority queue
+	while(cp<size || !pq.empty()){
+		if(switchChecker){
+			//set the currentTime to 0 if you put the process back in the queue
+			p.currentTime = 0;
+			pq.push(p);
+			switchChecker = false;
+		}
+
+		if(!pq.empty()){
+			p = pq.top();
+			pq.pop();
+		}
+
+		while(p.burst!=p.runningTime){
+			//check if any of the processes enter with the timer
+			int progChecker = checkArrival(arr, size, cp, timer);
+			if(progChecker>0){
+				for(int i=0; i<progChecker; i++){
+					pq.push(arr[cp]);
+					cp++;
+				}
+			}
+
+			//Preemptive: Check if top of the queue has less remaining time left. If it does, make it the current running process
+			Program ptemp = pq.top();
+			if(ptemp.priority < p.priority){
 				switchChecker = true;
 				break;
 			}
@@ -302,22 +444,17 @@ string srtf(Program* arr, int size){
 }
 
 /*
+PP, RR
 
-PN, PP, RR
+string rr(int q){
 
-string pn(){
-
-}
-
-string pp(){
-	
 }
 
 */
-//string rr(int q){
 
-//}
-
+//------------------------------------------------------------------------------------------------------------------------------------
+// MAIN FUNCTION
+//------------------------------------------------------------------------------------------------------------------------------------
 
 int main(){
 
@@ -337,10 +474,10 @@ int main(){
 		cin >> numPros;
 		cin >> type;
 
-		/*if(type=="RR"){
+		if(type=="RR"){
 			int q;
 			cin >> q;
-		} */
+		} 
 
 		Program list[numPros];
 
@@ -361,16 +498,20 @@ int main(){
 			cout << "Created Program: Index - " << list[j].index << ", Arrival - " << list[j].arrival << ", Burst - " << list[j].burst << ", Priority - " << list[j].priority << endl;
 		}
 
-		if(type=="FCFS"){
-			cout << fcfs(list, numPros);
-		}
-
 		if(type=="SJF"){
 			cout << sjf(list, numPros);
 		}
 
 		if(type=="SRTF"){
 			cout << srtf(list, numPros);
+		}
+
+		if(type=="PN"){
+			cout << pn(list, numPros);
+		}
+
+		if(type=="PP"){
+			cout << pp(list, numPros);
 		}
 	}
 
