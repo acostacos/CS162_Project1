@@ -1,0 +1,275 @@
+CS 126 Test Cases with Results:
+
+FCFS
+Test Case:
+5 FCFS
+10 45 0
+3 50 0
+6 80 0
+20 20 0
+60 9 0
+
+Expected Result:
+53 2 50X
+133 3 80X
+178 1 45X
+198 4 20X
+207 5 9X
+
+Test Case:
+6 FCFS
+0 10 0
+20 100 0
+10 30 0
+50 10 0
+5 20 0
+10 30 0
+
+Expected Result:
+10 1 10X
+30 5 20X
+60 3 30X
+90 6 30X
+190 2 100X
+200 4 10X
+
+Test Case:
+10 FCFS
+0 10 0
+0 24 0
+10 10 0
+40 10 0
+55 100 0
+15 69 0
+20 14 0
+56 19 0
+3 21 0
+0 33 0
+
+Expected Result:
+10 1 10X
+34 2 24X
+67 10 33X
+88 9 21X
+98 3 10X
+167 6 69X
+181 7 14X
+191 4 10X
+291 5 100X
+310 8 19X
+
+--------------------
+SJF
+Test Case:
+5 SJF
+0 60 0
+0 50 0
+0 20 0
+0 20 0
+200 5 0
+
+Expected Result:
+20 3 20X
+40 4 20X
+90 2 50X
+150 1 60X
+205 5 5X
+
+Test Case:
+3 SJF
+0 60 1
+0 50 2
+0 40 3
+
+Expected Result:
+40 3 40X
+90 2 50X
+150 1 60X
+
+Test Case:
+3 SJF
+10 50 1
+20 30 2
+20 20 3
+
+Expected Result:
+60 1 50X
+80 3 20X
+110 2 30X
+
+--------------------
+SRTF
+Test Case:
+3 SRTF
+0 40 1
+10 20 2
+15 5 3
+
+Expected Result:
+10 1 10X
+15 2 5X
+20 3 5X
+35 2 15X
+65 1 30X
+
+Test Case:
+4 SRTF
+0 50 0
+10 20 0
+30 5 0
+100 5 0
+
+Expected Result:
+10 1 10X
+30 2 20X
+35 3 5X
+75 1 40X
+105 4 5X
+
+Test Case:
+3 SRTF
+10 50 0
+10 60 0
+30 5 1
+
+Expected Result:
+30 1 20X
+35 3 5X
+65 1 30X
+125 2 60X
+
+--------------------
+PN
+Test Case:
+5 PN
+0 60 4
+0 50 2
+0 20 3
+0 20 5
+0 10 1
+
+Expected Result:
+10 5 10X
+60 2 50X
+80 3 20X
+140 1 60X
+160 4 20X
+
+Test Case:
+3 PN
+0 50 2
+30 10 1
+20 20 3
+
+Expected Result:
+50 1 50X
+60 2 10X
+80 3 20X
+
+Test Case:
+3 PN
+0 20 1
+40 30 3 
+40 20 2
+
+Expected Result:
+20 1 20X
+60 3 20X
+90 2 30X
+
+--------------------
+PP
+
+Test Case:
+3 PP
+0 10 2
+10 20 1
+0 5 3
+
+Expected Result:
+10 1 10X
+30 2 20X
+50 1 20X
+55 3 5X
+
+Test Case:
+5 PP
+50 60 5
+50 30 3
+60 20 2
+70 30 1
+100 5 4
+
+Expected Result:
+60 2 10X
+70 3 10X
+100 4 30X
+110 3 10X
+130 2 20X
+135 5 5X
+195 1 60X	
+
+Test Case:
+4 PP
+0 50 4
+0 30 2
+20 5 3
+20 20 1
+
+Expected Result:
+20 2 20X
+40 4 20X
+50 2 10X
+55 3 5X
+105 1 50X
+
+--------------------
+RR:
+Test Case:
+3 RR 10
+0 15 0
+0 25 0
+15 15 0
+
+Expected Result:
+10 1 10X
+20 2 10X
+30 3 10X
+35 1 5X
+45 2 10X
+50 3 5X
+55 2 5X
+
+Test Case:
+4 RR 15
+0 25 0
+15 10 0
+5 50 0
+20 30 0
+
+Expected Result:
+15 1 15X
+30 3 15X
+40 2 10X
+55 4 15X
+65 1 10X
+80 3 15X
+95 4 15X
+115 3 20X
+
+Test Case:
+5 RR 20
+10 25 0
+10 50 0
+30 20 0
+25 10 0
+20 10 0
+
+Expected Result:
+30 1 20X
+50 2 20X
+60 5 10X
+70 4 10X
+90 3 20X
+95 1 5X
+125 2 30X
