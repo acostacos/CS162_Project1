@@ -479,63 +479,38 @@ string rr(Program* arr, int size, int quanTime){
 				cp++;
 			}
 	}
-
-	//assignChecker is used to store whether a program was preemptively swapped or not. It only controls whether to discard the program, or put it back in the queue
-	bool switchChecker = false;
-	Program p;
 	//run while pq is not empty and while not all the programs have been added to the priority queue
-	//to check remaining time: burst-runningTime
 	while(cp<size || !pq.empty()){
-		if(switchChecker){
-			//set the currentTime to 0 if you put the process back in the queue
-			p.currentTime = 0;
-			pq.push(p);
-			switchChecker = false;
-		}
+		Program p = pq.top();
+		pq.pop();
 
-		if(!pq.empty()){
-			p = pq.top();
-			pq.pop();
-		}
-
-		while(p.burst!=p.runningTime){
+		for(int i = 0; i < quanTime; i++){
 			//check if any of the processes enter with the timer
 			int progChecker = checkArrival(arr, size, cp, timer);
 			if(progChecker>0){
-				for(int i=0; i<progChecker; i++){
+				for(int j=0; j<progChecker; j++){
 					pq.push(arr[cp]);
 					cp++;
 				}
 			}
-
-			//RR: Check if top of the queue has less remaining time left. If it does, make it the current running process
-			Program ptemp = pq.top();
-			if(ptemp.runningTime == quanTime){
-
-				switchChecker = true;
-				break;
-			}
-
+			cout << p.index << " " << p.runningTime << " " << p.burst << endl;
 			p.run();
 			timer++;
+			p.index++;
+			if(p.runningTime == p.burst){
+				p.index = p.index-p.burst;
+				out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+				break;
+			}
 		}
-
-		out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
-
+		if(p.runningTime != p.burst){
+			out << timer << " " << p.index << " " << p.currentTime << "X" << endl; 
+			pq.push(p);
+		}
 	}
-
 	output = out.str();
 	return output;
 }
-
-/*
-PP, RR
-
-string rr(int q){
-
-}
-
-*/
 
 //------------------------------------------------------------------------------------------------------------------------------------
 // MAIN FUNCTION
