@@ -452,10 +452,8 @@ struct RRCompare{
 public:
 	bool operator()(Program& p1, Program& p2){
 		//false compares the next item in the queue, true inserts the program before the program it's currently being compared to
-		if(p1.arrival > p2.arrival && p1.runningTime >= p2.arrival){
-			if(p1.index > p2.index){
-				return true;
-			}
+		if(p1.arrival > p2.arrival){
+			return true;
 		}
 		else if(p1.arrival == p2.arrival){
 			if(p1.index > p2.index){
@@ -499,15 +497,16 @@ string rr(Program* arr, int size, int quanTime){
 			p.run();
 			timer++;
 			p.index++;
-			Program ptemp = pq.top();
 			if(p.runningTime == p.burst){
-				p.index = p.index-p.burst;
+				p.index = p.index - p.burst;
 				out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
 				break;
 			}
 		}
+		p.arrival = timer + (quanTime * pq.size()-1);
+
 		if(p.runningTime != p.burst){
-			out << timer << " " << p.index << " " << p.currentTime << "X" << endl; 
+			out << timer << " " << p.index-p.currentTime << " " << p.currentTime << "X" << endl; 
 			pq.push(p);
 		}
 	}
