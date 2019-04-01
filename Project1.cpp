@@ -8,12 +8,28 @@
 using namespace std;
 
 //------------------------------------------------------------------------------------------------------------------------------------
+// GLOBAL VARIABLES
+//------------------------------------------------------------------------------------------------------------------------------------
+
+float cpuCounter = 0; //takes note of how many seconds the CPU was used
+float cpuUtil[9999]; //takes note of CPU Utilization for each clock cycle
+
+int doneCounter = 0; //takes note of how many programs have finished
+int throughput[9999]; //takes note of throughput for each clock cycle
+
+int isWaiting[999]; //takes note if the process is waiting
+int waiting[999]; //takes note of waiting time for each process
+
+int turnaround[999]; //takes note of turnaround time for each process
+int response[999]; //takes note of the response time for each process
+
+//------------------------------------------------------------------------------------------------------------------------------------
 // HELPER CLASSES AND FUNCTIONS
 //------------------------------------------------------------------------------------------------------------------------------------
 
 //Program class which specifies one program
 struct Program{
-	//takes note of index, arrival time, burst time, priority and remaning time left to run
+	//takes note of index, arrival time, burst time, priority, total running time and current time running
 	int index; int arrival; int burst; int priority;
 	int runningTime; int currentTime;
 
@@ -77,6 +93,39 @@ void quicksort(Program* arr, int low, int high){
 	}
 }
 
+void updateThroughput(int timer){
+	throughput[timer] = doneCounter;
+}
+
+void updateUtilization(int timer){
+	cpuUtil[timer] = cpuCounter/timer;
+	
+}
+
+void updateResponse(int i, int timer){
+	response[i] = timer;
+}
+
+void updateTurnaround(int i, int timer){
+	turnaround[i] = timer;
+}
+
+void updateWaiting(int i){
+	if(isWaiting[i]==1){
+		waiting[i]++;
+	}
+}
+
+float getAverage(int* arr, int size){
+	float ave = 0;
+	for(int i=1; i<=size; i++){
+		ave+=arr[i];
+	}
+	ave = ave/size;
+
+	return ave;
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------
 // FCFS
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -110,6 +159,11 @@ string fcfs(Program* arr, int size){
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	while(cp<size || !pq.empty()){
 		if(pq.empty() && cp<size){
+			for(int i=1; i<=arr[cp].arrival-timer; i++){
+				updateThroughput(timer+i);
+				updateUtilization(timer+i);
+			}
+
 			//Case just started: push all of the elements that arrive first inside
 			//Case while running: adjust timer to the next element to come that hasnt arrived yet and add it to the priority queue
 			timer=arr[cp].arrival;
@@ -121,6 +175,8 @@ string fcfs(Program* arr, int size){
 
 		p = pq.top();
 		pq.pop();
+		updateResponse(p.index, timer);
+		waiting[p.index] = response[p.index]-p.arrival;
 
 		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer and if they do add them
@@ -134,11 +190,19 @@ string fcfs(Program* arr, int size){
 			//keep running and increment the timer
 			p.run();
 			timer++;
+			cpuCounter++;
+			updateUtilization(timer);
+			updateThroughput(timer);
+			
 		}
 
 		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
-
+		updateTurnaround(p.index, timer);
+		doneCounter++;
 	}
+
+	updateUtilization(timer);
+	updateThroughput(timer);
 
 	output = out.str();
 	return output;
@@ -177,6 +241,11 @@ string sjf(Program* arr, int size){
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	while(cp<size || !pq.empty()){
 		if(pq.empty() && cp<size){
+			for(int i=1; i<=arr[cp].arrival-timer; i++){
+				updateThroughput(timer+i);
+				updateUtilization(timer+i);
+			}
+
 			//Case just started: push all of the elements that arrive first inside
 			//Case while running: adjust timer to the next element to come that hasnt arrived yet and add it to the priority queue
 			timer=arr[cp].arrival;
@@ -188,6 +257,8 @@ string sjf(Program* arr, int size){
 
 		p = pq.top();
 		pq.pop();
+		updateResponse(p.index, timer);
+		waiting[p.index] = response[p.index]-p.arrival;
 
 		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer and if they do add them
@@ -201,11 +272,19 @@ string sjf(Program* arr, int size){
 			//keep running and increment the timer
 			p.run();
 			timer++;
+			cpuCounter++;
+			updateUtilization(timer);
+			updateThroughput(timer);
 		}
 
 		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+		updateTurnaround(p.index, timer);
+		doneCounter++;
 
 	}
+
+	updateUtilization(timer);
+	updateThroughput(timer);
 
 	output = out.str();
 	return output;
@@ -242,15 +321,23 @@ string srtf(Program* arr, int size){
 	//switchChecker is used to store whether a program was preemptively swapped or not. It only controls whether to discard the program, or put it back in the queue
 	bool switchChecker = false;
 	Program p;
+
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	//to check remaining time: burst-runningTime
 	while(cp<size || !pq.empty()){
+		for(int i=1; i<=arr[cp].arrival-timer; i++){
+			updateThroughput(timer+i);
+			updateUtilization(timer+i);
+		}
+
 		if(pq.empty() && cp<size){
 			//Case just started: push all of the elements that arrive first inside
 			//Case while running: adjust timer to the next element to come that hasnt arrived yet and add it to the priority queue
 			timer=arr[cp].arrival;
 			while(arr[cp].arrival==timer && cp<size){
 				pq.push(arr[cp]);
+				isWaiting[arr[cp].index] = 1;
+				cout << arr[cp].index << " " << isWaiting[arr[cp].index] << endl;
 				cp++;
 			}
 		}
@@ -258,18 +345,25 @@ string srtf(Program* arr, int size){
 		if(switchChecker){
 			//set the currentTime to 0 if you put the process back in the queue
 			p.currentTime = 0;
+			isWaiting[p.index] = 1;
 			pq.push(p);
 			switchChecker = false;
 		}
 
 		p = pq.top();
 		pq.pop();
+		isWaiting[p.index] = 0;
+		if(p.runningTime==0){
+			updateResponse(p.index, timer);
+		}
 
 		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer and if they do add them
 			if(arr[cp].arrival==timer){
 				while(arr[cp].arrival==timer && cp<size){
 					pq.push(arr[cp]);
+					isWaiting[arr[cp].index] = 1;
+					cout << arr[cp].index << " " << isWaiting[arr[cp].index] << endl;
 					cp++;
 				}
 			}
@@ -283,15 +377,34 @@ string srtf(Program* arr, int size){
 
 			p.run();
 			timer++;
+			cpuCounter++;
+			updateUtilization(timer);
+			updateThroughput(timer);
+			for(int i=1; i<=size; i++){
+				updateWaiting(i);
+			}
 		}
 
 		//used to handle a peculiar case. If a program arrives at the exact same cc that an interrupted program continues, it prints even if it was not able to run
 		//this error comes from the way the code was structured and could be improved later
 		if(p.currentTime!=0){
-			out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+			if (p.runningTime == p.burst)
+			{
+				out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+			}
+			else{
+				out << timer << " " << p.index << " " << p.currentTime << endl;
+			}
+			
+			isWaiting[p.index] = 0;
+			updateTurnaround(p.index, timer);
+			doneCounter++;
 		}
 
 	}
+
+	updateUtilization(timer);
+	updateThroughput(timer);
 
 	output = out.str();
 	return output;
@@ -334,6 +447,11 @@ string pn(Program* arr, int size){
 
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	while(cp<size || !pq.empty()){
+		for(int i=1; i<=arr[cp].arrival-timer; i++){
+			updateThroughput(timer+i);
+			updateUtilization(timer+i);
+		}
+
 		if(pq.empty() && cp<size){
 			//Case just started: push all of the elements that arrive first inside
 			//Case while running: adjust timer to the next element to come that hasnt arrived yet and add it to the priority queue
@@ -346,6 +464,9 @@ string pn(Program* arr, int size){
 
 		p = pq.top();
 		pq.pop();
+		updateResponse(p.index, timer);
+		waiting[p.index] = response[p.index]-p.arrival;
+
 
 		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer and if they do add them
@@ -359,11 +480,19 @@ string pn(Program* arr, int size){
 			//keep running and increment the timer
 			p.run();
 			timer++;
+			cpuCounter++;
+			updateUtilization(timer);
+			updateThroughput(timer);
 		}
 
 		out << timer << " " << p.index << " " << p.runningTime << "X" << endl;
+		updateTurnaround(p.index, timer);
+		doneCounter++;
 
 	}
+
+	updateUtilization(timer);
+	updateThroughput(timer);
 
 	output = out.str();
 	return output;
@@ -381,15 +510,22 @@ string pp(Program* arr, int size){
 	//switchChecker is used to store whether a program was preemptively swapped or not. It only controls whether to discard the program, or put it back in the queue
 	bool switchChecker = false;
 	Program p;
+
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	//to check remaining time: burst-runningTime
 	while(cp<size || !pq.empty()){
 		if(pq.empty() && cp<size){
+			for(int i=1; i<=arr[cp].arrival-timer; i++){
+				updateThroughput(timer+i);
+				updateUtilization(timer+i);
+			}
+
 			//Case just started: push all of the elements that arrive first inside
 			//Case while running: adjust timer to the next element to come that hasnt arrived yet and add it to the priority queue
 			timer=arr[cp].arrival;
 			while(arr[cp].arrival==timer && cp<size){
 				pq.push(arr[cp]);
+				isWaiting[arr[cp].index] = 1;
 				cp++;
 			}
 		}
@@ -397,18 +533,24 @@ string pp(Program* arr, int size){
 		if(switchChecker){
 			//set the currentTime to 0 if you put the process back in the queue
 			p.currentTime = 0;
+			isWaiting[p.index] = 1;
 			pq.push(p);
 			switchChecker = false;
 		}
 
 		p = pq.top();
 		pq.pop();
+		isWaiting[p.index] = 0;
+		if(p.runningTime==0){
+			updateResponse(p.index, timer);
+		}
 
 		while(p.burst!=p.runningTime){
 			//check if any of the processes enter with the timer and if they do add them
 			if(arr[cp].arrival==timer){
 				while(arr[cp].arrival==timer && cp<size){
 					pq.push(arr[cp]);
+					isWaiting[arr[cp].index] = 1;
 					cp++;
 				}
 			}
@@ -422,15 +564,33 @@ string pp(Program* arr, int size){
 
 			p.run();
 			timer++;
+			cpuCounter++;
+			updateUtilization(timer);
+			updateThroughput(timer);
+			for(int i=1; i<=size; i++){
+				updateWaiting(i);
+			}
 		}
 
 		//used to handle a peculiar case. If a program arrives at the exact same cc that an interrupted program continues, it prints even if it was not able to run
 		//this error comes from the way the code was structured and could be improved later
 		if(p.currentTime!=0){
-			out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+			if (p.runningTime == p.burst)
+			{
+				out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+			}
+			else{
+				out << timer << " " << p.index << " " << p.currentTime << endl;
+			}
+			isWaiting[p.index] = 0;
+			updateTurnaround(p.index, timer);
+			doneCounter++;
 		}
 
 	}
+
+	updateUtilization(timer);
+	updateThroughput(timer);
 
 	output = out.str();
 	return output;
@@ -468,17 +628,27 @@ string rr(Program* arr, int size, int quanTime){
 	//run while pq is not empty and while not all the programs have been added to the priority queue
 	while(cp<size || !pq.empty()){
 		if(pq.empty() && cp<size){
+			for(int i=1; i<=arr[cp].arrival-timer; i++){
+				updateThroughput(timer+i);
+				updateUtilization(timer+i);
+			}
+
 			//Case just started: push all of the elements that arrive first inside
 			//Case while running: adjust timer to the next element to come that hasnt arrived yet and add it to the priority queue
 			timer=arr[cp].arrival;
 			while(arr[cp].arrival==timer && cp<size){
 				pq.push(arr[cp]);
+				isWaiting[arr[cp].index] = 1;
 				cp++;
 			}
 		}
 
 		p = pq.top();
 		pq.pop();
+		isWaiting[p.index] = 0;
+		if(p.runningTime==0){
+			updateResponse(arr[cp].index-1, timer);
+		}
 
 
 		for(int i = 0; i < quanTime; i++){
@@ -492,9 +662,18 @@ string rr(Program* arr, int size, int quanTime){
 
 			p.run();
 			timer++;
+			cpuCounter++;
+			updateUtilization(timer);
+			updateThroughput(timer);
+			for(int i=1; i<=size; i++){
+				updateWaiting(i);
+			}
 
 			if(p.runningTime == p.burst){
 				out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+				doneCounter++;
+				isWaiting[p.index] = 0;
+				updateTurnaround(p.index, timer);
 				break;
 			}
 		}
@@ -504,12 +683,17 @@ string rr(Program* arr, int size, int quanTime){
 		if(p.runningTime != p.burst){
 			//used so that it does not repeat print during the last index
 			if(!pq.empty()){
-				out << timer << " " << p.index << " " << p.currentTime << "X" << endl;
+				out << timer << " " << p.index << " " << p.currentTime << endl;
 				p.currentTime = 0; 
 			}
 			pq.push(p);
+			isWaiting[arr[cp].index] = 1;
 		}
 	}
+
+	updateUtilization(timer);
+	updateThroughput(timer);
+
 	output = out.str();
 	return output;
 }
@@ -520,14 +704,6 @@ string rr(Program* arr, int size, int quanTime){
 //------------------------------------------------------------------------------------------------------------------------------------
 
 int main(){
-
-	/*
-	Code to get a line of input and parse it to interger
-
-	string iNumTest; int numTest;
-	getline(cin, iNumTest);
-	numTest = atoi(iNumTest.c_str());
-	*/
 
 	int numTest;
 	cin >> numTest;
@@ -550,7 +726,7 @@ int main(){
 			cin >> burst;
 			cin >> priority;
 
-			Program p(j+1, arrival, burst, priority);
+			Program p(j+1, arrival+1, burst, priority);
 			list[j] = p;
 		}
 
@@ -560,6 +736,8 @@ int main(){
 		for(int j=0; j<numPros; j++){
 			cout << "Created Program: Index - " << list[j].index << ", Arrival - " << list[j].arrival << ", Burst - " << list[j].burst << ", Priority - " << list[j].priority << endl;
 		}
+
+		cout << i+1 << endl;
 
 		if(type=="FCFS"){
 			cout << fcfs(list, numPros);
@@ -584,6 +762,21 @@ int main(){
 		if(type=="RR"){
 			cout << rr(list, numPros, q);
 		}
+
+		cout << "Response Time: " << getAverage(response, numPros) << endl;
+		cout << "Turnaround Time: " << getAverage(turnaround, numPros) << endl;
+		cout << "Waiting Time: " << getAverage(waiting, numPros) << endl;
+
+		int tInput;
+		cin >> tInput;
+		cout << "Throughput: " << throughput[tInput] << endl;
+
+		int cInput;
+		cin >> cInput;
+		cout << "CPU Utilization: " << cpuUtil[cInput]*100 << "%" << endl;
+
+		doneCounter = 0;
+		cpuCounter = 0;
 	}
 
 	return 0;
