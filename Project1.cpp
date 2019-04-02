@@ -737,7 +737,7 @@ int main(){
 			cout << "Created Program: Index - " << list[j].index << ", Arrival - " << list[j].arrival << ", Burst - " << list[j].burst << ", Priority - " << list[j].priority << endl;
 		}
 
-		cout << i+1 << endl;
+		cout << i+1 << " - " << type << endl;
 
 		if(type=="FCFS"){
 			cout << fcfs(list, numPros);

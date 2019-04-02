@@ -1,0 +1,286 @@
+Created Program: Index - 2, Arrival - 4, Burst - 50, Priority - 0
+Created Program: Index - 3, Arrival - 7, Burst - 80, Priority - 0
+Created Program: Index - 1, Arrival - 11, Burst - 45, Priority - 0
+Created Program: Index - 4, Arrival - 21, Burst - 20, Priority - 0
+Created Program: Index - 5, Arrival - 61, Burst - 9, Priority - 0
+1
+54 2 50X
+134 3 80X
+179 1 45X
+199 4 20X
+208 5 9X
+Response Time: 114
+Turnaround Time: 154.8
+Waiting Time: 93.2
+Throughput: 0
+CPU Utilization: 86.6667%
+Created Program: Index - 1, Arrival - 1, Burst - 10, Priority - 0
+Created Program: Index - 5, Arrival - 6, Burst - 20, Priority - 0
+Created Program: Index - 3, Arrival - 11, Burst - 30, Priority - 0
+Created Program: Index - 6, Arrival - 11, Burst - 30, Priority - 0
+Created Program: Index - 2, Arrival - 21, Burst - 100, Priority - 0
+Created Program: Index - 4, Arrival - 51, Burst - 10, Priority - 0
+2
+11 1 10X
+31 5 20X
+61 3 30X
+91 6 30X
+191 2 100X
+201 4 10X
+Response Time: 64.3333
+Turnaround Time: 97.6667
+Waiting Time: 47.5
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 2, Arrival - 1, Burst - 24, Priority - 0
+Created Program: Index - 1, Arrival - 1, Burst - 10, Priority - 0
+Created Program: Index - 10, Arrival - 1, Burst - 33, Priority - 0
+Created Program: Index - 9, Arrival - 4, Burst - 21, Priority - 0
+Created Program: Index - 3, Arrival - 11, Burst - 10, Priority - 0
+Created Program: Index - 6, Arrival - 16, Burst - 69, Priority - 0
+Created Program: Index - 7, Arrival - 21, Burst - 14, Priority - 0
+Created Program: Index - 4, Arrival - 41, Burst - 10, Priority - 0
+Created Program: Index - 5, Arrival - 56, Burst - 100, Priority - 0
+Created Program: Index - 8, Arrival - 57, Burst - 19, Priority - 0
+3
+11 1 10X
+35 2 24X
+68 10 33X
+89 9 21X
+99 3 10X
+168 6 69X
+182 7 14X
+192 4 10X
+292 5 100X
+311 8 19X
+Response Time: 113.7
+Turnaround Time: 144.7
+Waiting Time: 92.8
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 3, Arrival - 1, Burst - 20, Priority - 0
+Created Program: Index - 2, Arrival - 1, Burst - 50, Priority - 0
+Created Program: Index - 1, Arrival - 1, Burst - 60, Priority - 0
+Created Program: Index - 4, Arrival - 1, Burst - 20, Priority - 0
+Created Program: Index - 5, Arrival - 201, Burst - 5, Priority - 0
+4
+21 3 20X
+41 4 20X
+91 2 50X
+151 1 60X
+206 5 5X
+Response Time: 71
+Turnaround Time: 102
+Waiting Time: 30
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 2, Arrival - 1, Burst - 50, Priority - 2
+Created Program: Index - 1, Arrival - 1, Burst - 60, Priority - 1
+Created Program: Index - 3, Arrival - 1, Burst - 40, Priority - 3
+5
+41 3 40X
+91 2 50X
+151 1 60X
+Response Time: 44.3333
+Turnaround Time: 94.3333
+Waiting Time: 43.3333
+Throughput: 0
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 11, Burst - 50, Priority - 1
+Created Program: Index - 2, Arrival - 21, Burst - 30, Priority - 2
+Created Program: Index - 3, Arrival - 21, Burst - 20, Priority - 3
+6
+61 1 50X
+81 3 20X
+111 2 30X
+Response Time: 51
+Turnaround Time: 84.3333
+Waiting Time: 33.3333
+Throughput: 0
+CPU Utilization: 63.3333%
+Created Program: Index - 1, Arrival - 1, Burst - 40, Priority - 1
+Created Program: Index - 2, Arrival - 11, Burst - 20, Priority - 2
+Created Program: Index - 3, Arrival - 16, Burst - 5, Priority - 3
+7
+1 1
+2 1
+3 1
+11 1 10
+16 2 5
+21 3 5X
+36 2 15X
+66 1 30X
+Response Time: 9.33333
+Turnaround Time: 41
+Waiting Time: 43.3333
+Throughput: 3
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 1, Burst - 50, Priority - 0
+Created Program: Index - 2, Arrival - 11, Burst - 20, Priority - 0
+Created Program: Index - 3, Arrival - 31, Burst - 5, Priority - 0
+Created Program: Index - 4, Arrival - 101, Burst - 5, Priority - 0
+8
+1 1
+2 1
+3 1
+4 1
+11 1 10
+31 2 20X
+36 3 5X
+76 1 40X
+106 4 5X
+Response Time: 36
+Turnaround Time: 62.25
+Waiting Time: 43.75
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 11, Burst - 50, Priority - 0
+Created Program: Index - 2, Arrival - 11, Burst - 60, Priority - 0
+Created Program: Index - 3, Arrival - 31, Burst - 5, Priority - 1
+9
+1 1
+2 1
+3 1
+31 1 20
+36 3 5X
+66 1 30X
+126 2 60X
+Response Time: 36
+Turnaround Time: 76
+Waiting Time: 71.6667
+Throughput: 0
+CPU Utilization: 63.3333%
+Created Program: Index - 4, Arrival - 1, Burst - 20, Priority - 5
+Created Program: Index - 3, Arrival - 1, Burst - 20, Priority - 3
+Created Program: Index - 2, Arrival - 1, Burst - 50, Priority - 2
+Created Program: Index - 1, Arrival - 1, Burst - 60, Priority - 4
+Created Program: Index - 5, Arrival - 1, Burst - 10, Priority - 1
+10
+11 5 10X
+61 2 50X
+81 3 20X
+141 1 60X
+161 4 20X
+Response Time: 59
+Turnaround Time: 91
+Waiting Time: 58
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 1, Burst - 50, Priority - 2
+Created Program: Index - 3, Arrival - 21, Burst - 20, Priority - 3
+Created Program: Index - 2, Arrival - 31, Burst - 10, Priority - 1
+11
+51 1 50X
+61 2 10X
+81 3 20X
+Response Time: 37.6667
+Turnaround Time: 64.3333
+Waiting Time: 20
+Throughput: 0
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 1, Burst - 20, Priority - 1
+Created Program: Index - 2, Arrival - 41, Burst - 30, Priority - 3
+Created Program: Index - 3, Arrival - 41, Burst - 20, Priority - 2
+12
+21 1 20X
+61 3 20X
+91 2 30X
+Response Time: 34.3333
+Turnaround Time: 57.6667
+Waiting Time: 6.66667
+Throughput: 1
+CPU Utilization: 66.6667%
+Created Program: Index - 1, Arrival - 1, Burst - 10, Priority - 2
+Created Program: Index - 3, Arrival - 1, Burst - 5, Priority - 3
+Created Program: Index - 2, Arrival - 11, Burst - 20, Priority - 1
+13
+11 1 10X
+31 2 20X
+36 3 5X
+Response Time: 14.3333
+Turnaround Time: 26
+Waiting Time: 16.6667
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 51, Burst - 60, Priority - 5
+Created Program: Index - 2, Arrival - 51, Burst - 30, Priority - 3
+Created Program: Index - 3, Arrival - 61, Burst - 20, Priority - 2
+Created Program: Index - 4, Arrival - 71, Burst - 30, Priority - 1
+Created Program: Index - 5, Arrival - 101, Burst - 5, Priority - 4
+14
+61 2 10
+71 3 10
+101 4 30X
+111 3 10X
+131 2 20X
+136 5 5X
+196 1 60X
+Response Time: 90
+Turnaround Time: 135
+Waiting Time: 77
+Throughput: 0
+CPU Utilization: 0%
+Created Program: Index - 1, Arrival - 1, Burst - 50, Priority - 4
+Created Program: Index - 2, Arrival - 1, Burst - 30, Priority - 2
+Created Program: Index - 3, Arrival - 21, Burst - 5, Priority - 3
+Created Program: Index - 4, Arrival - 21, Burst - 20, Priority - 1
+15
+21 2 20
+41 4 20X
+51 2 10X
+56 3 5X
+106 1 50X
+Response Time: 32.25
+Turnaround Time: 63.5
+Waiting Time: 115
+Throughput: 1
+CPU Utilization: 96.6667%
+Created Program: Index - 1, Arrival - 1, Burst - 15, Priority - 0
+Created Program: Index - 2, Arrival - 1, Burst - 25, Priority - 0
+Created Program: Index - 3, Arrival - 16, Burst - 15, Priority - 0
+11 1 10
+21 2 10
+31 3 10
+36 1 5X
+46 2 10
+51 3 5X
+56 2 5X
+Response Time: 
+Turnaround Time: 
+Waiting Time: 
+Throughput: 0
+CPU Utilization: 
+Created Program: Index - 1, Arrival - 1, Burst - 25, Priority - 0
+Created Program: Index - 3, Arrival - 6, Burst - 50, Priority - 0
+Created Program: Index - 2, Arrival - 16, Burst - 10, Priority - 0
+Created Program: Index - 4, Arrival - 21, Burst - 30, Priority - 0
+16 1 15
+31 3 15
+41 2 10X
+56 4 15
+66 1 10X
+81 3 15
+96 4 15X
+116 3 20X
+Response Time: 
+Turnaround Time: 
+Waiting Time: 
+Throughput: 0
+CPU Utilization: 
+Created Program: Index - 1, Arrival - 11, Burst - 25, Priority - 0
+Created Program: Index - 2, Arrival - 11, Burst - 50, Priority - 0
+Created Program: Index - 5, Arrival - 21, Burst - 10, Priority - 0
+Created Program: Index - 4, Arrival - 26, Burst - 10, Priority - 0
+Created Program: Index - 3, Arrival - 31, Burst - 20, Priority - 0
+31 1 20
+51 2 20
+61 5 10X
+71 4 10X
+91 3 20X
+96 1 5X
+126 2 30X
+Response Time: 
+Turnaround Time: 
+Waiting Time: 
+Throughput: 0
+CPU Utilization: 
