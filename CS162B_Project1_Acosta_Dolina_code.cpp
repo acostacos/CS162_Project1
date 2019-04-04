@@ -645,17 +645,19 @@ string rr(Program* arr, int size, int quanTime){
 
 		p = pq.top();
 		pq.pop();
+
 		isWaiting[p.index] = 0;
 		if(p.runningTime==0){
-			updateResponse(arr[cp].index-1, timer);
+			updateResponse(p.index, timer);
 		}
 
 
 		for(int i = 0; i < quanTime; i++){
 			//check if any of the processes enter with the timer and if they do add them
-			if(arr[cp].arrival==timer){
+			if(cp<size && arr[cp].arrival==timer){
 				while(arr[cp].arrival==timer && cp<size){
 					pq.push(arr[cp]);
+					isWaiting[arr[cp].index] = 1;
 					cp++;
 				}
 			}
@@ -687,7 +689,7 @@ string rr(Program* arr, int size, int quanTime){
 				p.currentTime = 0; 
 			}
 			pq.push(p);
-			isWaiting[arr[cp].index] = 1;
+			isWaiting[p.index] = 1;
 		}
 	}
 
@@ -737,7 +739,7 @@ int main(){
 			cout << "Created Program: Index - " << list[j].index << ", Arrival - " << list[j].arrival << ", Burst - " << list[j].burst << ", Priority - " << list[j].priority << endl;
 		}
 
-		cout << i+1 << " - " << type << endl;
+		cout << i+1 << endl;
 
 		if(type=="FCFS"){
 			cout << fcfs(list, numPros);

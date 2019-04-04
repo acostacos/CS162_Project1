@@ -238,6 +238,7 @@ CPU Utilization: 96.6667%
 Created Program: Index - 1, Arrival - 1, Burst - 15, Priority - 0
 Created Program: Index - 2, Arrival - 1, Burst - 25, Priority - 0
 Created Program: Index - 3, Arrival - 16, Burst - 15, Priority - 0
+16
 11 1 10
 21 2 10
 31 3 10
@@ -245,15 +246,16 @@ Created Program: Index - 3, Arrival - 16, Burst - 15, Priority - 0
 46 2 10
 51 3 5X
 56 2 5X
-Response Time: 
-Turnaround Time: 
-Waiting Time: 
+Response Time: 11
+Turnaround Time: 47.6667
+Waiting Time: 130
 Throughput: 0
-CPU Utilization: 
+CPU Utilization: 96.6667%
 Created Program: Index - 1, Arrival - 1, Burst - 25, Priority - 0
 Created Program: Index - 3, Arrival - 6, Burst - 50, Priority - 0
 Created Program: Index - 2, Arrival - 16, Burst - 10, Priority - 0
 Created Program: Index - 4, Arrival - 21, Burst - 30, Priority - 0
+17
 16 1 15
 31 3 15
 41 2 10X
@@ -262,16 +264,17 @@ Created Program: Index - 4, Arrival - 21, Burst - 30, Priority - 0
 81 3 15
 96 4 15X
 116 3 20X
-Response Time: 
-Turnaround Time: 
-Waiting Time: 
+Response Time: 22.25
+Turnaround Time: 79.75
+Waiting Time: 172.5
 Throughput: 0
-CPU Utilization: 
+CPU Utilization: 96.6667%
 Created Program: Index - 1, Arrival - 11, Burst - 25, Priority - 0
 Created Program: Index - 2, Arrival - 11, Burst - 50, Priority - 0
 Created Program: Index - 5, Arrival - 21, Burst - 10, Priority - 0
 Created Program: Index - 4, Arrival - 26, Burst - 10, Priority - 0
 Created Program: Index - 3, Arrival - 31, Burst - 20, Priority - 0
+18
 31 1 20
 51 2 20
 61 5 10X
@@ -279,8 +282,8 @@ Created Program: Index - 3, Arrival - 31, Burst - 20, Priority - 0
 91 3 20X
 96 1 5X
 126 2 30X
-Response Time: 
-Turnaround Time: 
-Waiting Time: 
+Response Time: 45
+Turnaround Time: 89
+Waiting Time: 190
 Throughput: 0
-CPU Utilization: 
+CPU Utilization: 63.3333%
